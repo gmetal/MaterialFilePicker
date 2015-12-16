@@ -51,7 +51,7 @@ public class FileTypeUtils {
         }
     }
 
-    private static Map<String, FileType> fileTypeExtensions = new HashMap<>();
+    private static Map<String, FileType> fileTypeExtensions = new HashMap<String, FileType>();
     static {
         for(FileType fileType : FileType.values()) {
             for(String extension : fileType.getExtensions()) {

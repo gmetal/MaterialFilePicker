@@ -12,7 +12,7 @@ import java.util.List;
 public class FileUtils {
     public static List<File> getFileListByDirPath(String path) {
         File directory = new File(path);
-        List<File> resultFiles = new ArrayList<>();
+        List<File> resultFiles = new ArrayList<File>();
 
         // TODO: filter here
         File[] files = directory.listFiles();

@@ -1,6 +1,7 @@
 package com.nbsp.materialfilepicker.ui;
 
-import android.app.FragmentManager;
+import android.os.Build;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -69,7 +70,7 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
     }
 
     private void initFragment() {
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, DirectoryFragment.getInstance(START_PATH))
                 .commit();
     }
@@ -85,7 +86,7 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
     }
 
     private void addFragmentToBackStack(String path) {
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, DirectoryFragment.getInstance(path))
                 .addToBackStack(null)
                 .commit();
@@ -93,15 +94,20 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == android.R.id.home) {
-            onBackPressed();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (menuItem.getItemId() == android.R.id.home) {
+                onBackPressed();
+            }
+        }
+        else {
+            // TODO
         }
         return super.onOptionsItemSelected(menuItem);
     }
 
     @Override
     public void onBackPressed(){
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
 
         if (fm.getBackStackEntryCount() > 0) {
             fm.popBackStack();
