@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="type_certificate">Πιστοποιητικό</string>
+    <string name="empty_directory_hint">Άδειος φάκελος</string>
+    <string name="file_picker_app_name">MaterialFilePicker</string>
+    <string name="start_path_name">Συσκευή</string>
+    <string name="type_archive">Συμπιεσμένο αρχείο</string>
+    <string name="type_directory">Φάκελος</string>
+    <string name="type_document">Αρχείο</string>
+    <string name="type_drawing">Σχέδιο</string>
+    <string name="type_excel">Λογιστικό φύλλο</string>
+    <string name="type_image">Εικόνα</string>
+    <string name="type_music">Μουσική</string>
+    <string name="type_pdf">Αρχείο PDF</string>
+    <string name="type_power_point">Παρουσίαση</string>
+    <string name="type_word">Κείμενο</string>
+</resources>
