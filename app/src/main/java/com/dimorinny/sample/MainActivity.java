@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         mContainer = (FrameLayout) findViewById(R.id.container);
 
         Intent intent = new Intent(this, com.nbsp.materialfilepicker.ui.FilePickerActivity.class);
+        //intent.putExtra("arg_mode", 1); // FILE MODE
+        intent.putExtra("arg_mode", 2); // DIRECTORY MODE
         startActivityForResult(intent, 1);
     }
 

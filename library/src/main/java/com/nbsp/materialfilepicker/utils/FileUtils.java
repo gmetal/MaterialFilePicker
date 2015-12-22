@@ -10,15 +10,17 @@ import java.util.List;
  * Created by Dimorinny on 24.10.15.
  */
 public class FileUtils {
-    public static List<File> getFileListByDirPath(String path) {
+    public static List<File> getFileListByDirPath(String path, boolean includeFiles) {
         File directory = new File(path);
         List<File> resultFiles = new ArrayList<File>();
 
         // TODO: filter here
         File[] files = directory.listFiles();
-        if(files != null && files.length > 0) {
-            for(File f : files) {
-                if(f.isHidden()) {
+        if (files != null && files.length > 0) {
+            for (File f : files) {
+                if (f.isHidden()) {
+                    continue;
+                } else if (!includeFiles && !f.isDirectory()) {
                     continue;
                 }
                 resultFiles.add(f);

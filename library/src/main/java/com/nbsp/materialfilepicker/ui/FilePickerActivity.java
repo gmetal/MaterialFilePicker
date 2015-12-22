@@ -1,11 +1,11 @@
 package com.nbsp.materialfilepicker.ui;
 
-import android.os.Build;
-import android.support.v4.app.FragmentManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -23,12 +23,17 @@ import java.lang.reflect.Field;
  */
 public class FilePickerActivity extends AppCompatActivity implements DirectoryFragment.FileClickListener {
     private static final String ARG_CURRENT_PATH = "arg_title_state";
+    private static final String ARG_MODE = "arg_mode";
     public static final String RESULT_FILE_PATH = "result_file_path";
     private static final String START_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
     private static final int HANDLE_CLICK_DELAY = 150;
 
+    public static final int FILE_MODE = 1;
+    public static final int DIRECTORY_MODE = 2;
+
     private Toolbar mToolbar;
     private String mCurrentPath = START_PATH;
+    private int mMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,7 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
 
         if (savedInstanceState != null) {
             mCurrentPath = savedInstanceState.getString(ARG_CURRENT_PATH);
+            mMode = savedInstanceState.getInt(ARG_MODE);
         } else {
             initFragment();
         }
@@ -60,7 +66,8 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
 
             TextView textView = (TextView) f.get(mToolbar);
             textView.setEllipsize(TextUtils.TruncateAt.START);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         updateTitle();
     }
@@ -70,8 +77,9 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
     }
 
     private void initFragment() {
+        mMode = getIntent().getIntExtra(ARG_MODE, FILE_MODE);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, DirectoryFragment.getInstance(START_PATH))
+                .add(R.id.container, DirectoryFragment.getInstance(START_PATH, mMode == DIRECTORY_MODE ? DirectoryFragment.DIRECTORY_MODE : DirectoryFragment.FILE_MODE))
                 .commit();
     }
 
@@ -87,7 +95,7 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
 
     private void addFragmentToBackStack(String path) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, DirectoryFragment.getInstance(path))
+                .replace(R.id.container, DirectoryFragment.getInstance(path, mMode == DIRECTORY_MODE ? DirectoryFragment.DIRECTORY_MODE : DirectoryFragment.FILE_MODE))
                 .addToBackStack(null)
                 .commit();
     }
@@ -98,15 +106,14 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
             if (menuItem.getItemId() == android.R.id.home) {
                 onBackPressed();
             }
-        }
-        else {
+        } else {
             // TODO
         }
         return super.onOptionsItemSelected(menuItem);
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
 
         if (fm.getBackStackEntryCount() > 0) {
@@ -123,6 +130,7 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(ARG_CURRENT_PATH, mCurrentPath);
+        outState.putInt(ARG_MODE, mMode);
     }
 
     @Override
@@ -135,6 +143,17 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
         }, HANDLE_CLICK_DELAY);
     }
 
+    @Override
+    public boolean onDirectoryLongClicked(final File directoryLongClickedFile) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handleDirectoryLongClicked(directoryLongClickedFile);
+            }
+        }, HANDLE_CLICK_DELAY);
+        return true;
+    }
+
     private void handleFileClicked(final File clickedFile) {
         if (clickedFile.isDirectory()) {
             addFragmentToBackStack(clickedFile.getPath());
@@ -142,6 +161,12 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
             updateTitle();
         } else {
             setResultAndFinish(clickedFile.getPath());
+        }
+    }
+
+    private void handleDirectoryLongClicked(final File clickedDirectory) {
+        if (clickedDirectory.isDirectory()) {
+            setResultAndFinish(clickedDirectory.getPath());
         }
     }
 
