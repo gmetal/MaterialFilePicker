@@ -21,8 +21,6 @@ import java.util.List;
 public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.DirectoryViewHolder> {
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
-
-        boolean onItemLongClick(View view, int position);
     }
 
     public class DirectoryViewHolder extends RecyclerView.ViewHolder {
@@ -37,12 +35,6 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.Dire
                 @Override
                 public void onClick(View v) {
                     clickListener.onItemClick(v, getAdapterPosition());
-                }
-            });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return clickListener.onItemLongClick(v, getAdapterPosition());
                 }
             });
             mFileImage = (ImageView) itemView.findViewById(R.id.item_file_image);

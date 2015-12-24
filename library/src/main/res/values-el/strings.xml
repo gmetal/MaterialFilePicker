@@ -14,4 +14,5 @@
     <string name="type_pdf">Αρχείο PDF</string>
     <string name="type_power_point">Παρουσίαση</string>
     <string name="type_word">Κείμενο</string>
+    <string name="select_button_label">Επιλογή</string>
 </resources>

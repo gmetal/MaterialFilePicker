@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.nbsp.materialfilepicker.R;
 import com.nbsp.materialfilepicker.utils.FileUtils;
@@ -23,7 +24,7 @@ public class DirectoryFragment extends Fragment {
     interface FileClickListener {
         void onFileClicked(File clickedFile);
 
-        boolean onDirectoryLongClicked(File directoryLongClickedFile);
+        void onDirectorySelected(final File directorySelected);
     }
 
     private static final String ARG_FILE_PATH = "arg_file_path";
@@ -36,6 +37,7 @@ public class DirectoryFragment extends Fragment {
     private String mPath;
     private int mMode;
     private EmptyRecyclerView mDirectoryRecyclerView;
+    private Button mSelectButton;
     private DirectoryAdapter mDirectoryAdapter;
     private FileClickListener mFileClickListener;
 
@@ -69,6 +71,7 @@ public class DirectoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_directory, container, false);
         mDirectoryRecyclerView = (EmptyRecyclerView) view.findViewById(R.id.directory_recycler_view);
         mEmptyView = view.findViewById(R.id.directory_empty_view);
+        mSelectButton = (Button) view.findViewById(R.id.select_button);
         return view;
     }
 
@@ -89,15 +92,20 @@ public class DirectoryFragment extends Fragment {
                     mFileClickListener.onFileClicked(mDirectoryAdapter.getModel(position));
                 }
             }
+        });
 
+        mSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onItemLongClick(View view, int position) {
-                if (mMode == DIRECTORY_MODE) {
-                    return mFileClickListener.onDirectoryLongClicked(mDirectoryAdapter.getModel(position));
+            public void onClick(View v) {
+                if (mFileClickListener != null) {
+                    mFileClickListener.onDirectorySelected(new File(mPath));
                 }
-                return false;
             }
         });
+
+        if (mMode == FILE_MODE) {
+            mSelectButton.setVisibility(View.GONE);
+        }
 
         mDirectoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mDirectoryRecyclerView.setAdapter(mDirectoryAdapter);

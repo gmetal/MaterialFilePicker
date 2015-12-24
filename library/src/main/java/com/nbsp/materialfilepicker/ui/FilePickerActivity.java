@@ -144,15 +144,15 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
     }
 
     @Override
-    public boolean onDirectoryLongClicked(final File directoryLongClickedFile) {
+    public void onDirectorySelected(final File directorySelected) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                handleDirectoryLongClicked(directoryLongClickedFile);
+                handleDirectorySelected(directorySelected);
             }
         }, HANDLE_CLICK_DELAY);
-        return true;
     }
+
 
     private void handleFileClicked(final File clickedFile) {
         if (clickedFile.isDirectory()) {
@@ -164,10 +164,8 @@ public class FilePickerActivity extends AppCompatActivity implements DirectoryFr
         }
     }
 
-    private void handleDirectoryLongClicked(final File clickedDirectory) {
-        if (clickedDirectory.isDirectory()) {
-            setResultAndFinish(clickedDirectory.getPath());
-        }
+    private void handleDirectorySelected(final File selectedDirectory) {
+        setResultAndFinish(selectedDirectory.getPath());
     }
 
     private void setResultAndFinish(String filePath) {

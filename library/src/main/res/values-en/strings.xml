@@ -14,4 +14,5 @@
     <string name="type_pdf">PDF document</string>
     <string name="type_power_point">Presentation</string>
     <string name="type_word">Document</string>
+    <string name="select_button_label">Select</string>
 </resources>
